@@ -61,6 +61,12 @@ canvas{
 <div id="resultScreen" style="display:none">
     <h2>Результаты</h2>
 
+    <div id="stats" style="
+        font-size:28px;
+        font-weight:bold;
+        margin-bottom:15px;">
+    </div>
+
     <canvas id="chart" width="300" height="300"></canvas>
 
     <br>
@@ -94,6 +100,19 @@ function drawChart(){
     if(chart){
         chart.destroy();
     }
+    const total = votes1 + votes2;
+
+const percent1 =
+    total ? ((votes1 / total) * 100).toFixed(1) : 0;
+
+const percent2 =
+    total ? ((votes2 / total) * 100).toFixed(1) : 0;
+
+document.getElementById("stats").innerHTML =
+    `
+    Вариант 1: ${percent1}% (${votes1} голосов)<br>
+    Вариант 2: ${percent2}% (${votes2} голосов)
+    `;
 
     chart = new Chart(
         document.getElementById('chart'),
