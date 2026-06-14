@@ -51,6 +51,18 @@ canvas{
     margin-bottom: 10px;
 }
 
+/* 🔽 маленькая кнопка сброса */
+.reset-btn{
+    padding: 10px 18px;
+    font-size: 18px;
+    margin-top: 15px;
+    opacity: 0.8;
+}
+
+.reset-btn:hover{
+    opacity: 1;
+}
+
 </style>
 </head>
 
@@ -73,7 +85,12 @@ canvas{
     <br>
 
     <button onclick="nextVote()">Следующий голос</button>
-    <button onclick="resetVotes()">Сбросить результаты</button>
+
+    <br>
+
+    <button class="reset-btn" onclick="resetVotes()">
+        Сбросить результаты
+    </button>
 </div>
 
 <script>
@@ -86,6 +103,20 @@ let chart;
 function saveVotes(){
     localStorage.setItem("votes1", votes1);
     localStorage.setItem("votes2", votes2);
+}
+
+function showScreen(){
+    const total = votes1 + votes2;
+
+    // если уже есть голоса — сразу показываем результаты
+    if(total > 0){
+        document.getElementById("voteScreen").style.display = "none";
+        document.getElementById("resultScreen").style.display = "block";
+        drawChart();
+    } else {
+        document.getElementById("voteScreen").style.display = "block";
+        document.getElementById("resultScreen").style.display = "none";
+    }
 }
 
 function vote(option){
@@ -112,8 +143,8 @@ function drawChart(){
     const percent2 = total ? ((votes2 / total) * 100).toFixed(1) : 0;
 
     document.getElementById("stats").innerHTML =
-        `Вариант 1: ${percent1}% (${votes1} голосов)<br>
-         Вариант 2: ${percent2}% (${votes2} голосов)`;
+        `Вариант 1: ${percent1}% (${votes1})<br>
+         Вариант 2: ${percent2}% (${votes2})`;
 
     if(chart){
         chart.destroy();
@@ -158,8 +189,10 @@ function resetVotes(){
     localStorage.removeItem("votes1");
     localStorage.removeItem("votes2");
 
-    drawChart();
+    showScreen(); // обновляем интерфейс правильно
 }
+
+window.onload = showScreen;
 
 </script>
 
