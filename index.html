@@ -34,7 +34,7 @@ h2{
 button{
     padding: 20px 40px;
     margin: 10px;
-    font-size: 30px;
+    font-size: 26px;
     cursor: pointer;
 }
 
@@ -51,10 +51,10 @@ canvas{
     margin-bottom: 10px;
 }
 
-/* 🔽 маленькая кнопка сброса */
+/* маленькая кнопка сброса */
 .reset-btn{
     padding: 10px 18px;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 15px;
     opacity: 0.8;
 }
@@ -69,10 +69,15 @@ canvas{
 <body>
 
 <div id="voteScreen">
-    <h2>Выберите вариант</h2>
+    <h2>ЧТО ДЛЯ ВАС ИНТЕРЕСНЕЕ?</h2>
 
-    <button onclick="vote(1)">Вариант 1</button>
-    <button onclick="vote(2)">Вариант 2</button>
+    <button onclick="vote(1)">
+        10 ошибок, из-за которых вы сливаете бюджет на внешку (блогеров) в 2026-ом году
+    </button>
+
+    <button onclick="vote(2)">
+        3 правила, как эффективно делать внешннюю рекламу
+    </button>
 </div>
 
 <div id="resultScreen" style="display:none">
@@ -108,7 +113,6 @@ function saveVotes(){
 function showScreen(){
     const total = votes1 + votes2;
 
-    // если уже есть голоса — сразу показываем результаты
     if(total > 0){
         document.getElementById("voteScreen").style.display = "none";
         document.getElementById("resultScreen").style.display = "block";
@@ -143,8 +147,8 @@ function drawChart(){
     const percent2 = total ? ((votes2 / total) * 100).toFixed(1) : 0;
 
     document.getElementById("stats").innerHTML =
-        `Вариант 1: ${percent1}% (${votes1})<br>
-         Вариант 2: ${percent2}% (${votes2})`;
+        `10 ошибок…: ${percent1}% (${votes1})<br>
+         3 правила…: ${percent2}% (${votes2})`;
 
     if(chart){
         chart.destroy();
@@ -155,7 +159,10 @@ function drawChart(){
         {
             type: 'pie',
             data: {
-                labels: ['Вариант 1', 'Вариант 2'],
+                labels: [
+                    "10 ошибок, из-за которых вы сливаете бюджет на внешку (блогеров) в 2026-ом году",
+                    "3 правила, как эффективно делать внешннюю рекламу"
+                ],
                 datasets: [{
                     data: [votes1, votes2]
                 }]
@@ -166,7 +173,7 @@ function drawChart(){
                     legend: {
                         labels: {
                             font: {
-                                size: 22
+                                size: 16
                             }
                         }
                     }
@@ -189,7 +196,7 @@ function resetVotes(){
     localStorage.removeItem("votes1");
     localStorage.removeItem("votes2");
 
-    showScreen(); // обновляем интерфейс правильно
+    showScreen();
 }
 
 window.onload = showScreen;
