@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Голосование</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+#voteScreen,
+#resultScreen{
+    width: 100%;
+}
+
+h2{
+    font-size: 42px;
+    margin-bottom: 30px;
+}
+
+button{
+    padding: 20px 40px;
+    margin: 15px;
+    font-size: 36px;
+    cursor: pointer;
+}
+
+canvas{
+    display: block;
+    margin: 0 auto;
+    max-width: 300px;
+    max-height: 300px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="voteScreen">
+    <h2>Выберите вариант</h2>
+
+    <button onclick="vote(1)">Вариант 1</button>
+    <button onclick="vote(2)">Вариант 2</button>
+</div>
+
+<div id="resultScreen" style="display:none">
+    <h2>Результаты</h2>
+
+    <canvas id="chart" width="300" height="300"></canvas>
+
+    <br>
+
+    <button onclick="nextVote()">Следующий голос</button>
+</div>
+
+<script>
+
+let votes1 = 0;
+let votes2 = 0;
+
+let chart;
+
+function vote(option){
+
+    if(option === 1){
+        votes1++;
+    }else{
+        votes2++;
+    }
+
+    document.getElementById("voteScreen").style.display = "none";
+    document.getElementById("resultScreen").style.display = "block";
+
+    drawChart();
+}
+
+function drawChart(){
+
+    if(chart){
+        chart.destroy();
+    }
+
+    chart = new Chart(
+        document.getElementById('chart'),
+        {
+            type: 'pie',
+            data: {
+                labels: ['Вариант 1', 'Вариант 2'],
+                datasets: [{
+                    data: [votes1, votes2]
+                }]
+            },
+            options: {
+                responsive: false,
+
+                plugins: {
+
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 24
+                            }
+                        }
+                    },
+
+                    datalabels: {
+                        color: '#ffffff',
+                        font: {
+                            size: 24,
+                            weight: 'bold'
+                        },
+
+                        formatter: (value, context) => {
+
+                            const data =
+                                context.chart.data.datasets[0].data;
+
+                            const total =
+                                data.reduce((a, b) => a + b, 0);
+
+                            const percentage =
+                                total ? (value / total * 100) : 0;
+
+                            return percentage.toFixed(0) + '%';
+                        }
+                    }
+                }
+            },
+
+            plugins: [ChartDataLabels]
+        }
+    );
+}
+
+function nextVote(){
+    document.getElementById("voteScreen").style.display = "block";
+    document.getElementById("resultScreen").style.display = "none";
+}
+
+</script>
+
+</body>
+</html>
